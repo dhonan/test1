@@ -1,0 +1,185 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<xs:schema id="DataSet1" targetNamespace="http://tempuri.org/DataSet1.xsd" xmlns:mstns="http://tempuri.org/DataSet1.xsd" xmlns="http://tempuri.org/DataSet1.xsd" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata" xmlns:msprop="urn:schemas-microsoft-com:xml-msprop" attributeFormDefault="qualified" elementFormDefault="qualified">
+  <xs:annotation>
+    <xs:appinfo source="urn:schemas-microsoft-com:xml-msdatasource">
+      <DataSource DefaultConnectionIndex="1" FunctionsComponentName="InsertAutoHandle" GeneratorFunctionsComponentClassName="InsertAutoHandle" Modifier="AutoLayout, AnsiClass, Class, Public" SchemaSerializationMode="IncludeSchema" UserFunctionsComponentName="InsertAutoHandle" xmlns="urn:schemas-microsoft-com:xml-msdatasource">
+        <Connections>
+          <Connection AppSettingsObjectName="MySettings" AppSettingsPropertyName="CareSpace_database_prodConnectionString" ConnectionStringObject="" IsAppSettingsProperty="true" Modifier="Assembly" Name="CareSpace_database_prodConnectionString (MySettings)" ParameterPrefix="@" PropertyReference="ApplicationSettings.WebJob1.My.MySettings.GlobalReference.Default.CareSpace_database_prodConnectionString" Provider="System.Data.SqlClient" />
+          <Connection AppSettingsObjectName="Web.config" AppSettingsPropertyName="CareSpace-database-prodConnectionString" IsAppSettingsProperty="true" Modifier="Assembly" Name="CareSpace-database-prodConnectionString (Web.config)" ParameterPrefix="@" PropertyReference="AppConfig.System.Configuration.ConfigurationManager.0.ConnectionStrings.CareSpace-database-prodConnectionString.ConnectionString" Provider="System.Data.SqlClient" />
+        </Connections>
+        <Tables>
+          <TableAdapter BaseClass="System.ComponentModel.Component" DataAccessorModifier="AutoLayout, AnsiClass, Class, Public" DataAccessorName="TagAlertsActiveTableAdapter" GeneratorDataComponentClassName="TagAlertsActiveTableAdapter" Name="TagAlertsActive" UserDataComponentName="TagAlertsActiveTableAdapter">
+            <MainSource>
+              <DbSource ConnectionRef="CareSpace_database_prodConnectionString (MySettings)" DbObjectType="Unknown" FillMethodModifier="Public" FillMethodName="Fill" GenerateMethods="Both" GenerateShortCommands="false" GeneratorGetMethodName="GetData" GeneratorSourceName="Fill" GetMethodModifier="Public" GetMethodName="GetData" QueryType="Rowset" ScalarCallRetval="System.Object, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" UseOptimisticConcurrency="false" UserGetMethodName="GetData" UserSourceName="Fill">
+                <SelectCommand>
+                  <DbCommand CommandType="Text" ModifiedByUser="true">
+                    <CommandText>SELECT        TA.Id, TA.TagEventId, TA.UserId, TA.ButtonId, TA.TagId, TA.LocatorId, TA.IsActive, TA.Timestamp, TA.AlertType, TA.Message, TA.Notes, TAS.Status
+FROM            TagAlerts AS TA LEFT OUTER JOIN
+                         TagAlertStatuses AS TAS ON TA.Id = TAS.TagAlertId INNER JOIN
+                             (SELECT        TagAlertId, MAX(Id) AS ID, MAX(Timestamp) AS TimeStamp
+                               FROM            TagAlertStatuses
+                               GROUP BY TagAlertId) AS TA2 ON TA2.ID = TAS.Id
+WHERE        (TA.Timestamp &gt; DATEADD(hour, - 12, GETDATE())) AND (TAS.Status &lt;&gt; 'Handled') AND (TA.AlertType = 2)
+ORDER BY TA.Timestamp DESC</CommandText>
+                    <Parameters />
+                  </DbCommand>
+                </SelectCommand>
+              </DbSource>
+            </MainSource>
+            <Mappings>
+              <Mapping SourceColumn="Id" DataSetColumn="Id" />
+              <Mapping SourceColumn="TagEventId" DataSetColumn="TagEventId" />
+              <Mapping SourceColumn="UserId" DataSetColumn="UserId" />
+              <Mapping SourceColumn="ButtonId" DataSetColumn="ButtonId" />
+              <Mapping SourceColumn="TagId" DataSetColumn="TagId" />
+              <Mapping SourceColumn="LocatorId" DataSetColumn="LocatorId" />
+              <Mapping SourceColumn="IsActive" DataSetColumn="IsActive" />
+              <Mapping SourceColumn="Timestamp" DataSetColumn="Timestamp" />
+              <Mapping SourceColumn="AlertType" DataSetColumn="AlertType" />
+              <Mapping SourceColumn="Message" DataSetColumn="Message" />
+              <Mapping SourceColumn="Notes" DataSetColumn="Notes" />
+              <Mapping SourceColumn="Status" DataSetColumn="Status" />
+            </Mappings>
+            <Sources />
+          </TableAdapter>
+          <TableAdapter BaseClass="System.ComponentModel.Component" DataAccessorModifier="AutoLayout, AnsiClass, Class, Public" DataAccessorName="TagEventsAfterAlertTableAdapter" GeneratorDataComponentClassName="TagEventsAfterAlertTableAdapter" Name="TagEventsAfterAlert" UserDataComponentName="TagEventsAfterAlertTableAdapter">
+            <MainSource>
+              <DbSource ConnectionRef="CareSpace_database_prodConnectionString (MySettings)" DbObjectType="Unknown" FillMethodModifier="Public" FillMethodName="Fill" GenerateMethods="Both" GenerateShortCommands="false" GeneratorGetMethodName="GetData" GeneratorSourceName="Fill" GetMethodModifier="Public" GetMethodName="GetData" QueryType="Rowset" ScalarCallRetval="System.Object, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" UseOptimisticConcurrency="false" UserGetMethodName="GetData" UserSourceName="Fill">
+                <SelectCommand>
+                  <DbCommand CommandType="Text" ModifiedByUser="true">
+                    <CommandText>SELECT        TE.Id, TE.TagId, TE.LocatorId, TE.RoomId, TE.TimeStamp, RI.Name, RI.RoomType
+FROM            TagEvents AS TE LEFT OUTER JOIN
+                         RoomInfo AS RI ON TE.RoomId = RI.Id
+WHERE        (TE.TagId = @tagId) AND (TE.TimeStamp &gt; @TimeStamp)
+ORDER BY TE.Id </CommandText>
+                    <Parameters>
+                      <Parameter AllowDbNull="false" AutogeneratedName="tagId" ColumnName="TagId" DataSourceName="[CareSpace-database-prod].dbo.TagEvents" DataTypeServer="int" DbType="Int32" Direction="Input" ParameterName="@tagId" Precision="0" ProviderType="Int" Scale="0" Size="4" SourceColumn="TagId" SourceColumnNullMapping="false" SourceVersion="Current" />
+                      <Parameter AllowDbNull="false" AutogeneratedName="TimeStamp" ColumnName="TimeStamp" DataSourceName="[CareSpace-database-prod].dbo.TagEvents" DataTypeServer="datetime" DbType="DateTime" Direction="Input" ParameterName="@TimeStamp" Precision="0" ProviderType="DateTime" Scale="0" Size="8" SourceColumn="TimeStamp" SourceColumnNullMapping="false" SourceVersion="Current" />
+                    </Parameters>
+                  </DbCommand>
+                </SelectCommand>
+              </DbSource>
+            </MainSource>
+            <Mappings>
+              <Mapping SourceColumn="Id" DataSetColumn="Id" />
+              <Mapping SourceColumn="TagId" DataSetColumn="TagId" />
+              <Mapping SourceColumn="LocatorId" DataSetColumn="LocatorId" />
+              <Mapping SourceColumn="RoomId" DataSetColumn="RoomId" />
+              <Mapping SourceColumn="TimeStamp" DataSetColumn="TimeStamp" />
+              <Mapping SourceColumn="Name" DataSetColumn="Name" />
+              <Mapping SourceColumn="RoomType" DataSetColumn="RoomType" />
+            </Mappings>
+            <Sources />
+          </TableAdapter>
+        </Tables>
+        <Sources>
+          <DbSource ConnectionRef="CareSpace_database_prodConnectionString (MySettings)" DbObjectName="" DbObjectType="Unknown" GenerateShortCommands="true" GeneratorSourceName="InsertQuery" MethodsParameterType="CLR" Modifier="Public" Name="InsertQuery" QueryType="NoData" ScalarCallRetval="System.Object, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" UseOptimisticConcurrency="true" UserGetMethodName="GetDataBy" UserSourceName="InsertQuery">
+            <InsertCommand>
+              <DbCommand CommandType="Text" ModifiedByUser="true">
+                <CommandText>insert into TagAlertStatuses (TagAlertId, userId, Status, TimeStamp) values (@TagAlertId, @UseerId, 'Handled', GetDate())</CommandText>
+                <Parameters>
+                  <Parameter AllowDbNull="false" AutogeneratedName="TagAlertId" ColumnName="TagAlertId" DataSourceName="[CareSpace-database-prod].dbo.TagAlertStatuses" DataTypeServer="int" DbType="Int32" Direction="Input" ParameterName="@TagAlertId" Precision="0" ProviderType="Int" Scale="0" Size="4" SourceColumn="TagAlertId" SourceColumnNullMapping="false" SourceVersion="Current" />
+                  <Parameter AllowDbNull="false" AutogeneratedName="UseerId" ColumnName="UserId" DataSourceName="[CareSpace-database-prod].dbo.TagAlertStatuses" DataTypeServer="int" DbType="Int32" Direction="Input" ParameterName="@UseerId" Precision="0" ProviderType="Int" Scale="0" Size="4" SourceColumn="UserId" SourceColumnNullMapping="false" SourceVersion="Current" />
+                </Parameters>
+              </DbCommand>
+            </InsertCommand>
+          </DbSource>
+          <DbSource ConnectionRef="CareSpace_database_prodConnectionString (MySettings)" DbObjectName="" DbObjectType="Unknown" GenerateShortCommands="true" GeneratorSourceName="InsertTagAlertResponse" MethodsParameterType="CLR" Modifier="Public" Name="InsertTagAlertResponse" QueryType="NoData" ScalarCallRetval="System.Object, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" UseOptimisticConcurrency="true" UserGetMethodName="GetDataBy1" UserSourceName="InsertTagAlertResponse">
+            <InsertCommand>
+              <DbCommand CommandType="Text" ModifiedByUser="true">
+                <CommandText>INSERT INTO TagAlertResponses
+                         (TagAlertId, UserId, Response, Timestamp)
+VALUES        (@TagAlertId,@UserId, 'Completion', GETDATE())</CommandText>
+                <Parameters>
+                  <Parameter AllowDbNull="false" AutogeneratedName="TagAlertId" ColumnName="TagAlertId" DataSourceName="[CareSpace-database-prod].dbo.TagAlertResponses" DataTypeServer="int" DbType="Int32" Direction="Input" ParameterName="@TagAlertId" Precision="0" ProviderType="Int" Scale="0" Size="4" SourceColumn="TagAlertId" SourceColumnNullMapping="false" SourceVersion="Current" />
+                  <Parameter AllowDbNull="false" AutogeneratedName="UserId" ColumnName="UserId" DataSourceName="[CareSpace-database-prod].dbo.TagAlertResponses" DataTypeServer="int" DbType="Int32" Direction="Input" ParameterName="@UserId" Precision="0" ProviderType="Int" Scale="0" Size="4" SourceColumn="UserId" SourceColumnNullMapping="false" SourceVersion="Current" />
+                </Parameters>
+              </DbCommand>
+            </InsertCommand>
+          </DbSource>
+          <DbSource ConnectionRef="CareSpace_database_prodConnectionString (MySettings)" DbObjectName="" DbObjectType="Unknown" GenerateShortCommands="true" GeneratorSourceName="UpdateTagAlertActive" MethodsParameterType="CLR" Modifier="Public" Name="UpdateTagAlertActive" QueryType="NoData" ScalarCallRetval="System.Object, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" UseOptimisticConcurrency="true" UserGetMethodName="GetDataBy2" UserSourceName="UpdateTagAlertActive">
+            <UpdateCommand>
+              <DbCommand CommandType="Text" ModifiedByUser="true">
+                <CommandText>UPDATE       TagAlerts
+SET                IsActive = 0, Notes = 'Auto Handled'
+WHERE        (Id = @TagAlertId)</CommandText>
+                <Parameters>
+                  <Parameter AllowDbNull="false" AutogeneratedName="TagAlertId" ColumnName="Id" DataSourceName="[CareSpace-database-prod].dbo.TagAlerts" DataTypeServer="int" DbType="Int32" Direction="Input" ParameterName="@TagAlertId" Precision="0" ProviderType="Int" Scale="0" Size="4" SourceColumn="Id" SourceColumnNullMapping="false" SourceVersion="Original" />
+                </Parameters>
+              </DbCommand>
+            </UpdateCommand>
+          </DbSource>
+        </Sources>
+      </DataSource>
+    </xs:appinfo>
+  </xs:annotation>
+  <xs:element name="DataSet1" msdata:IsDataSet="true" msdata:UseCurrentLocale="true" msprop:EnableTableAdapterManager="true" msprop:Generator_DataSetName="DataSet1" msprop:Generator_UserDSName="DataSet1">
+    <xs:complexType>
+      <xs:choice minOccurs="0" maxOccurs="unbounded">
+        <xs:element name="TagAlertsActive" msprop:Generator_TableClassName="TagAlertsActiveDataTable" msprop:Generator_TableVarName="tableTagAlertsActive" msprop:Generator_TablePropName="TagAlertsActive" msprop:Generator_RowDeletingName="TagAlertsActiveRowDeleting" msprop:Generator_RowChangingName="TagAlertsActiveRowChanging" msprop:Generator_RowEvHandlerName="TagAlertsActiveRowChangeEventHandler" msprop:Generator_RowDeletedName="TagAlertsActiveRowDeleted" msprop:Generator_UserTableName="TagAlertsActive" msprop:Generator_RowChangedName="TagAlertsActiveRowChanged" msprop:Generator_RowEvArgName="TagAlertsActiveRowChangeEvent" msprop:Generator_RowClassName="TagAlertsActiveRow">
+          <xs:complexType>
+            <xs:sequence>
+              <xs:element name="Id" msdata:ReadOnly="true" msdata:AutoIncrement="true" msdata:AutoIncrementSeed="-1" msdata:AutoIncrementStep="-1" msprop:Generator_ColumnVarNameInTable="columnId" msprop:Generator_ColumnPropNameInRow="Id" msprop:Generator_ColumnPropNameInTable="IdColumn" msprop:Generator_UserColumnName="Id" type="xs:int" />
+              <xs:element name="TagEventId" msdata:DataType="System.Guid, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" msprop:Generator_ColumnVarNameInTable="columnTagEventId" msprop:Generator_ColumnPropNameInRow="TagEventId" msprop:Generator_ColumnPropNameInTable="TagEventIdColumn" msprop:Generator_UserColumnName="TagEventId" type="xs:string" />
+              <xs:element name="UserId" msprop:Generator_ColumnVarNameInTable="columnUserId" msprop:Generator_ColumnPropNameInRow="UserId" msprop:Generator_ColumnPropNameInTable="UserIdColumn" msprop:Generator_UserColumnName="UserId" type="xs:int" minOccurs="0" />
+              <xs:element name="ButtonId" msprop:Generator_ColumnVarNameInTable="columnButtonId" msprop:Generator_ColumnPropNameInRow="ButtonId" msprop:Generator_ColumnPropNameInTable="ButtonIdColumn" msprop:Generator_UserColumnName="ButtonId" type="xs:int" />
+              <xs:element name="TagId" msprop:Generator_ColumnVarNameInTable="columnTagId" msprop:Generator_ColumnPropNameInRow="TagId" msprop:Generator_ColumnPropNameInTable="TagIdColumn" msprop:Generator_UserColumnName="TagId" type="xs:int" minOccurs="0" />
+              <xs:element name="LocatorId" msprop:Generator_ColumnVarNameInTable="columnLocatorId" msprop:Generator_ColumnPropNameInRow="LocatorId" msprop:Generator_ColumnPropNameInTable="LocatorIdColumn" msprop:Generator_UserColumnName="LocatorId" type="xs:int" minOccurs="0" />
+              <xs:element name="IsActive" msprop:Generator_ColumnVarNameInTable="columnIsActive" msprop:Generator_ColumnPropNameInRow="IsActive" msprop:Generator_ColumnPropNameInTable="IsActiveColumn" msprop:Generator_UserColumnName="IsActive" type="xs:boolean" />
+              <xs:element name="Timestamp" msprop:Generator_ColumnVarNameInTable="columnTimestamp" msprop:Generator_ColumnPropNameInRow="Timestamp" msprop:Generator_ColumnPropNameInTable="TimestampColumn" msprop:Generator_UserColumnName="Timestamp" type="xs:dateTime" />
+              <xs:element name="AlertType" msprop:Generator_ColumnVarNameInTable="columnAlertType" msprop:Generator_ColumnPropNameInRow="AlertType" msprop:Generator_ColumnPropNameInTable="AlertTypeColumn" msprop:Generator_UserColumnName="AlertType" type="xs:int" minOccurs="0" />
+              <xs:element name="Message" msprop:Generator_ColumnVarNameInTable="columnMessage" msprop:Generator_ColumnPropNameInRow="Message" msprop:Generator_ColumnPropNameInTable="MessageColumn" msprop:Generator_UserColumnName="Message" minOccurs="0">
+                <xs:simpleType>
+                  <xs:restriction base="xs:string">
+                    <xs:maxLength value="128" />
+                  </xs:restriction>
+                </xs:simpleType>
+              </xs:element>
+              <xs:element name="Notes" msprop:Generator_ColumnVarNameInTable="columnNotes" msprop:Generator_ColumnPropNameInRow="Notes" msprop:Generator_ColumnPropNameInTable="NotesColumn" msprop:Generator_UserColumnName="Notes" minOccurs="0">
+                <xs:simpleType>
+                  <xs:restriction base="xs:string">
+                    <xs:maxLength value="1024" />
+                  </xs:restriction>
+                </xs:simpleType>
+              </xs:element>
+              <xs:element name="Status" msprop:Generator_ColumnVarNameInTable="columnStatus" msprop:Generator_ColumnPropNameInRow="Status" msprop:Generator_ColumnPropNameInTable="StatusColumn" msprop:Generator_UserColumnName="Status" minOccurs="0">
+                <xs:simpleType>
+                  <xs:restriction base="xs:string">
+                    <xs:maxLength value="50" />
+                  </xs:restriction>
+                </xs:simpleType>
+              </xs:element>
+            </xs:sequence>
+          </xs:complexType>
+        </xs:element>
+        <xs:element name="TagEventsAfterAlert" msprop:Generator_TableClassName="TagEventsAfterAlertDataTable" msprop:Generator_TableVarName="tableTagEventsAfterAlert" msprop:Generator_TablePropName="TagEventsAfterAlert" msprop:Generator_RowDeletingName="TagEventsAfterAlertRowDeleting" msprop:Generator_RowChangingName="TagEventsAfterAlertRowChanging" msprop:Generator_RowEvHandlerName="TagEventsAfterAlertRowChangeEventHandler" msprop:Generator_RowDeletedName="TagEventsAfterAlertRowDeleted" msprop:Generator_UserTableName="TagEventsAfterAlert" msprop:Generator_RowChangedName="TagEventsAfterAlertRowChanged" msprop:Generator_RowEvArgName="TagEventsAfterAlertRowChangeEvent" msprop:Generator_RowClassName="TagEventsAfterAlertRow">
+          <xs:complexType>
+            <xs:sequence>
+              <xs:element name="Id" msdata:DataType="System.Guid, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" msprop:Generator_ColumnVarNameInTable="columnId" msprop:Generator_ColumnPropNameInRow="Id" msprop:Generator_ColumnPropNameInTable="IdColumn" msprop:Generator_UserColumnName="Id" type="xs:string" />
+              <xs:element name="TagId" msprop:Generator_ColumnVarNameInTable="columnTagId" msprop:Generator_ColumnPropNameInRow="TagId" msprop:Generator_ColumnPropNameInTable="TagIdColumn" msprop:Generator_UserColumnName="TagId" type="xs:int" />
+              <xs:element name="LocatorId" msprop:Generator_ColumnVarNameInTable="columnLocatorId" msprop:Generator_ColumnPropNameInRow="LocatorId" msprop:Generator_ColumnPropNameInTable="LocatorIdColumn" msprop:Generator_UserColumnName="LocatorId" type="xs:int" minOccurs="0" />
+              <xs:element name="RoomId" msprop:Generator_ColumnVarNameInTable="columnRoomId" msprop:Generator_ColumnPropNameInRow="RoomId" msprop:Generator_ColumnPropNameInTable="RoomIdColumn" msprop:Generator_UserColumnName="RoomId" type="xs:int" minOccurs="0" />
+              <xs:element name="TimeStamp" msprop:Generator_ColumnVarNameInTable="columnTimeStamp" msprop:Generator_ColumnPropNameInRow="TimeStamp" msprop:Generator_ColumnPropNameInTable="TimeStampColumn" msprop:Generator_UserColumnName="TimeStamp" type="xs:dateTime" />
+              <xs:element name="Name" msprop:Generator_ColumnVarNameInTable="columnName" msprop:Generator_ColumnPropNameInRow="Name" msprop:Generator_ColumnPropNameInTable="NameColumn" msprop:Generator_UserColumnName="Name" minOccurs="0">
+                <xs:simpleType>
+                  <xs:restriction base="xs:string">
+                    <xs:maxLength value="50" />
+                  </xs:restriction>
+                </xs:simpleType>
+              </xs:element>
+              <xs:element name="RoomType" msprop:Generator_ColumnVarNameInTable="columnRoomType" msprop:Generator_ColumnPropNameInRow="RoomType" msprop:Generator_ColumnPropNameInTable="RoomTypeColumn" msprop:Generator_UserColumnName="RoomType" type="xs:int" minOccurs="0" />
+            </xs:sequence>
+          </xs:complexType>
+        </xs:element>
+      </xs:choice>
+    </xs:complexType>
+    <xs:unique name="Constraint1" msdata:PrimaryKey="true">
+      <xs:selector xpath=".//mstns:TagAlertsActive" />
+      <xs:field xpath="mstns:Id" />
+    </xs:unique>
+    <xs:unique name="TagEventsAfterAlert_Constraint1" msdata:ConstraintName="Constraint1" msdata:PrimaryKey="true">
+      <xs:selector xpath=".//mstns:TagEventsAfterAlert" />
+      <xs:field xpath="mstns:Id" />
+    </xs:unique>
+  </xs:element>
+</xs:schema>
